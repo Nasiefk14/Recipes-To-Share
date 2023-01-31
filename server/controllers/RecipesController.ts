@@ -11,7 +11,7 @@ export class RecipesController {
 
     static registerRouter(mongoClient: MongoClient) {
         RecipesController.mongoClient = mongoClient;
-        RecipesController.collection = RecipesController.mongoClient.db('tutorial').collection('recipes');
+        RecipesController.collection = RecipesController.mongoClient.db('recipes').collection('recipes');
         
         const router = Router();
         router.get(RecipesController.PATH, this.getAll);
@@ -30,13 +30,13 @@ export class RecipesController {
 
     static async getById(req : Request, res: Response, next: NextFunction) {
         const { id } = req.params;
+        const response = new ResponseHandler(res);
         const result = await RecipesController.collection.findOne({_id : new ObjectId(id)})
 
         if (!result) {
             return next(new NotFoundError());
         }
-        
-        res.json(result);
+        response.send(new Success(result))
     }
 
     static async deleteById(req : Request, res: Response) {
