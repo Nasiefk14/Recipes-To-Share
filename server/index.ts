@@ -14,6 +14,7 @@ client.connect().then(mongoClient => {
     console.log('Connection Successful');
     app.use(express.json())
     app.use(RecipesController.registerRouter(mongoClient));
+    app.use(UsersController.userRouter(mongoClient));
     
     app.use('*', (error: Error, req: Request, res: Response, next: NextFunction) => {
         return res.status(error.status).json(error);   
