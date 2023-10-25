@@ -1,4 +1,4 @@
-export class Error {
+class Error {
     constructor(public status: number = 500, public message: string = 'Something wrong', public data?: any) {}
 }
 

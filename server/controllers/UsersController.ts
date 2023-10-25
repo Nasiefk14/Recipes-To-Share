@@ -37,7 +37,7 @@ export class UsersController {
     });
 
     if (!result) {
-      return next(new NotFoundError());
+      return next(new NotFoundError('User Not Found!'));
     }
 
     res.json(result);

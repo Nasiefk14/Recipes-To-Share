@@ -1,6 +1,6 @@
 import { Router, Response, Request, NextFunction } from 'express';
 import { MongoClient, Collection, Document, ObjectId } from 'mongodb'
-import { NotFoundError } from '../utils/ErrorHandlerUtils'
+import { NotFoundError, Error } from '../utils/ErrorHandlerUtils'
 import { SuccessfullyCreated, Success } from '../utils/successHandlerUtils';
 import { ResponseHandler } from '../utils/ResponseHandler';
 
@@ -49,9 +49,25 @@ export class RecipesController {
         return res.send(result);
     }
 
-    static async createOne(req : Request, res: Response) {
+    static async createOne(req : Request, res: Response, next: NextFunction) {
         const response = new ResponseHandler(res);
-        const result = await RecipesController.collection.insertOne(req.body)
+        const { title, description, ingredients, steps, difficulty } = req.body;
+        if(!title){
+            return next(new Error(400,'Title Is Required!'))
+        }
+        if(!description){
+            return next(new Error(400,'Description Is Required!'))
+        }
+        if(!ingredients){
+            return next(new Error(400,'Ingredients Is Required!'))
+        }
+        if(!steps){
+            return next(new Error(400,'Steps Is Required!'))
+        }
+        if(!difficulty){
+            return next(new Error(400,'Difficulty Is Required!'))
+        }
+        const result = await RecipesController.collection.insertOne({title, description, ingredients, steps, difficulty})
         response.send(new SuccessfullyCreated(result));
     }
 }

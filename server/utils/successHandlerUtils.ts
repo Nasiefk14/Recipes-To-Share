@@ -6,4 +6,4 @@ export class SuccessfullyCreated extends Success {
     constructor(public data: any, public message: string = 'Successfully Created') {
         super(data, message, 201);
     }
-}
+} 
